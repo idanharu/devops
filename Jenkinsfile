@@ -1,12 +1,15 @@
 pipeline {
-    agent any
-
-    stages {
-        stage('Pull Request Action') {
-            steps {
-                echo 'Building..'
-                sh "python ${WORKSPACE}/main.py"
-            }
-        }
+  agent any
+  stages {
+    stage('version') {
+      steps {
+        sh 'python3 --version'
+      }
     }
+    stage('hello') {
+      steps {
+        sh 'python3 main.py'
+      }
+    }
+  }
 }
