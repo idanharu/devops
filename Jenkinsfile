@@ -6,7 +6,7 @@ pipeline {
             steps {
                 dir('./') {
                 withPythonEnv('Python3') {
-                        sh "python3 main.py"
+                        sh "python3 -m main.py"
                 }
                 }
             }
