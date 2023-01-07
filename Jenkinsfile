@@ -5,6 +5,7 @@ pipeline {
         stage('Pull Request Action') {
             steps {
                 echo 'Building..'
+                sh 'python $(WORKSPACE)/main.py'
             }
         }
     }
