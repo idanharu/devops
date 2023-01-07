@@ -1,5 +1,7 @@
 pipeline {
-    agent any
+    agent {
+        docker {image 'alpine:latest'}
+    }
 
     stages {
         stage('Pull Request Action') {
