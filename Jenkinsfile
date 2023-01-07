@@ -1,7 +1,15 @@
-node {
-    stage('Build') {
-        docker.image('python:3.10.7-alpine').inside {
-            sh 'python --version'
+pipeline {
+    agent any
+    
+    stages {
+        stage('Test') {
+            steps {
+                dir('./') {
+                withPythonEnv('Python3') {
+                        sh "python3 -m pytest"
+                }
+                }
+            }
         }
     }
 }
