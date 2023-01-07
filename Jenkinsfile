@@ -1,11 +1,8 @@
 pipeline {
-    agent none
+    agent any
 
     stages {
         stage('Pull Request Action') {
-            agent {
-               docker {image 'python:2-alpine'}
-            }
             steps {
                 echo 'Building..'
                 sh "python ${WORKSPACE}/main.py"
