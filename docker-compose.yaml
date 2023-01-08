@@ -1,0 +1,60 @@
+# This docker-compose file intent to create a multi-container application
+# that runs a Jenkins container connected via TLS to a Docker-in-Docker (dind) container as Docker daemon.
+#
+# Advice about this approach can be found at: 
+# http://jpetazzo.github.io/2015/09/03/do-not-use-docker-in-docker-for-ci/
+#
+# As well discussion about another alternatives on this setup can be found at:
+# https://forums.docker.com/t/using-docker-in-a-dockerized-jenkins-container/322/11
+#
+# Quick reference about Docker-in-Docker can be fount at:
+# https://hub.docker.com/_/docker
+# 
+# Main source: https://www.jenkins.io/doc/tutorials/create-a-pipeline-in-blue-ocean/
+
+version: '3.1'
+
+networks:
+  docker:
+
+volumes:
+  jenkins-data:
+  jenkins-docker-certs:
+
+services:
+
+  jenkins:
+    image: jenkinsci/blueocean
+    restart: always
+    networks:
+      - docker
+    ports:
+      - 8080:8080
+      - 50000:50000
+    tty: true
+    volumes:
+      - jenkins-data:/var/jenkins_home
+      - jenkins-docker-certs:/certs/client:ro
+      - $HOME:/home
+    environment:
+      - DOCKER_HOST=tcp://docker:2376
+      - DOCKER_CERT_PATH=/certs/client
+      - DOCKER_TLS_VERIFY=1
+
+  dind:
+    image: docker:dind
+    privileged: true
+    restart: always
+    networks:
+      docker:
+        aliases: 
+          - docker
+    ports:
+      - 2376:2376
+    tty: true
+    volumes:
+      - jenkins-data:/var/jenkins_home
+      - jenkins-docker-certs:/certs/client
+      - $HOME:/home
+    environment:
+      - DOCKER_TLS_CERTDIR=/certs
