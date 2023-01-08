@@ -8,7 +8,10 @@ pipeline {
                 }
             }
             steps {
-                sh 'python --version' 
+                sh 'python --version'
+                sh 'pwd'
+                sh 'ls'
+                sh 'python main.py'
             }
         }
     }
