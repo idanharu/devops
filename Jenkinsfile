@@ -1,14 +1,20 @@
+//
+// Modern jenkins python example - utilizing Pipelines and Docker agent(python:3)
+//
+
 pipeline {
-    agent any
-    
+    agent {
+      docker {
+        image 'python:3'
+        label 'my-build-agent'
+      }
+    }
     stages {
         stage('Test') {
             steps {
-                dir('./') {
-                withPythonEnv('Python3') {
-                        sh "python3 -m main.py"
-                }
-                }
+              sh """
+              python --version
+              """
             }
         }
     }
