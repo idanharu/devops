@@ -1,15 +1,14 @@
-//
-// Modern jenkins python example - utilizing Pipelines and Docker agent(python:3)
-//
-
 pipeline {
-    agent any
+    agent none 
     stages {
-        stage('Test') {
+        stage('Build') { 
+            agent {
+                docker {
+                    image 'python:2-alpine' 
+                }
+            }
             steps {
-              sh """
-              python --version
-              """
+                sh 'python --version' 
             }
         }
     }
